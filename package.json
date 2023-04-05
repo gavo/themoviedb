@@ -1,0 +1,19 @@
+{
+  "name": "themoviedb",
+  "version": "1.0.0",
+  "description": "themoviedb api",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gavo/themoviedb.git"
+  },
+  "author": "@gavo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gavo/themoviedb/issues"
+  },
+  "homepage": "https://github.com/gavo/themoviedb#readme"
+}
