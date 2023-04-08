@@ -16,7 +16,7 @@ const lazyLoader = new IntersectionObserver((entries) => {
   });
 });
 
-function createVideo(movies, container, lazyLoad = false) {
+function createVideo(movies, container, lazyLoad = true) {
   container.innerHTML = "";
   movies.forEach((movie) => {
     const movieContainer = document.createElement("div");
@@ -28,6 +28,12 @@ function createVideo(movies, container, lazyLoad = false) {
       lazyLoad ? "data-img" : "src",
       URL_BASE.concat(movie.poster_path)
     );
+    movieImg.addEventListener("error", () => {
+      movieImg.setAttribute(
+        "src",
+        "https://static.platzi.com/static/images/error/img404.png"
+      );
+    });
     movieContainer.onclick = () => {
       location.hash = `#movie=${movie.id}`;
     };

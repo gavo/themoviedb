@@ -11,6 +11,7 @@ arrowBtn.addEventListener("click", () => {
 });
 
 function navigator() {
+  window.scrollTo({ top: 0, behavior: "smooth" });
   const hash = location.hash;
   if (hash.startsWith("#trends")) {
     trendsPage();

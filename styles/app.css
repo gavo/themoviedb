@@ -119,6 +119,7 @@ footer {
 
 .movie-img {
   border-radius: 8px;
+  min-height: 300px;
 }
 .categoriesPreview-list,
 .categories-list {
