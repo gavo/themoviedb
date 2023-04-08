@@ -41,3 +41,54 @@ function createCategories(categories, container) {
     container.appendChild(categoryContainer);
   });
 }
+
+//API CONSUME
+
+async function getCategoriesPreview() {
+  const { data } = await api("genre/movie/list");
+  const genres = data.genres;
+  createCategories(genres, categoriesPreviewList);
+}
+
+async function getTrendingMoviesPreview() {
+  const { data } = await api("trending/movie/week");
+  createVideo(data.results, trendingMoviesPreviewList);
+}
+
+async function getMoviesByCategory(id) {
+  const { data } = await api("discover/movie", {
+    params: { with_genres: id },
+  });
+  createVideo(data.results, genericSection);
+}
+
+async function getMoviesBySearch(query) {
+  const { data } = await api("search/movie", {
+    params: { query },
+  });
+  createVideo(data.results, genericSection);
+}
+
+async function getTrendingMovies() {
+  const { data } = await api("trending/movie/week");
+  createVideo(data.results, genericSection);
+}
+
+async function getMovieById(id) {
+  const { data: movie } = await api(`movie/${id}`);
+
+  const movieImgUrl = "https://image.tmdb.org/t/p/w500/" + movie.poster_path;
+  headerSection.style.background = `linear-gradient( 180deg, rgba(0, 0, 0, 0.35) 19.27%, rgba(0, 0, 0, 0) 29.17%), url(${movieImgUrl}) `;
+
+  movieDetailTitle.textContent = movie.title;
+  movieDetailDescription.textContent = movie.overview;
+  movieDetailScore.textContent = movie.move_average;
+
+  createCategories(movie.genres, movieDetailCategoriesList);
+  getRelatedMoviesId(id);
+}
+
+async function getRelatedMoviesId(id) {
+  const { data } = await api(`movie/${id}/recommendations`);
+  createVideo(data.results, relatedMoviesContainer);
+}
