@@ -7,7 +7,16 @@ const api = axios.create({
 
 //UTILS
 
-function createVideo(movies, container) {
+const lazyLoader = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      const src = entry.target.getAttribute("data-img");
+      entry.target.setAttribute("src", src);
+    }
+  });
+});
+
+function createVideo(movies, container, lazyLoad = false) {
   container.innerHTML = "";
   movies.forEach((movie) => {
     const movieContainer = document.createElement("div");
@@ -15,10 +24,14 @@ function createVideo(movies, container) {
     movieContainer.classList.add("movie-container");
     movieImg.classList.add("movie-img");
     movieImg.setAttribute("alt", movie.title);
-    movieImg.setAttribute("src", URL_BASE.concat(movie.poster_path));
+    movieImg.setAttribute(
+      lazyLoad ? "data-img" : "src",
+      URL_BASE.concat(movie.poster_path)
+    );
     movieContainer.onclick = () => {
       location.hash = `#movie=${movie.id}`;
     };
+    if (lazyLoad) lazyLoader.observe(movieImg);
     movieContainer.appendChild(movieImg);
     container.appendChild(movieContainer);
   });
@@ -52,7 +65,7 @@ async function getCategoriesPreview() {
 
 async function getTrendingMoviesPreview() {
   const { data } = await api("trending/movie/week");
-  createVideo(data.results, trendingMoviesPreviewList);
+  createVideo(data.results, trendingMoviesPreviewList, true);
 }
 
 async function getMoviesByCategory(id) {
