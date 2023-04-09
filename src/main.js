@@ -16,8 +16,12 @@ const lazyLoader = new IntersectionObserver((entries) => {
   });
 });
 
-function createVideo(movies, container, lazyLoad = true) {
-  container.innerHTML = "";
+function createVideo(
+  movies,
+  container,
+  { lazyLoad = true, clean = true } = {}
+) {
+  if (clean) container.innerHTML = "";
   movies.forEach((movie) => {
     const movieContainer = document.createElement("div");
     const movieImg = document.createElement("img");
@@ -91,6 +95,23 @@ async function getMoviesBySearch(query) {
 async function getTrendingMovies() {
   const { data } = await api("trending/movie/week");
   createVideo(data.results, genericSection);
+}
+
+async function getPaginatedTrendingMovies() {
+  if (scrollIsBottom()) {
+    page++;
+    const { data } = await api("trending/movie/week", {
+      params: {
+        page,
+      },
+    });
+    createVideo(data.results, genericSection, { clean: false, lazyLoad: true });
+  }
+}
+
+function scrollIsBottom() {
+  const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+  return scrollTop + clientHeight >= scrollHeight - 50;
 }
 
 async function getMovieById(id) {
