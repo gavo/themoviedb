@@ -1,4 +1,5 @@
-let page = 1;
+let page;
+let total_pages;
 let infiniteScroll;
 
 searchFormBtn.addEventListener("click", () => {
@@ -15,7 +16,6 @@ window.addEventListener("hashchange", navigator, { passive: false });
 window.addEventListener("scroll", () => infiniteScroll(), { passive: false });
 
 function navigator() {
-  page = 1;
   window.scrollTo({ top: 0, behavior: "smooth" });
   const hash = location.hash;
   if (hash.startsWith("#trends")) {
@@ -67,7 +67,9 @@ function categoriesPage() {
   const [id, name] = location.hash.split("=")[1].split("-");
   headerCategoryTitle.innerHTML = name.replace("%20", " ");
   getMoviesByCategory(id);
-  infiniteScroll = () => {};
+  infiniteScroll = () => {
+    getMoviesByCategoryPaginated(id);
+  };
 }
 
 function movieDetailPage() {
@@ -104,7 +106,9 @@ function searchPage() {
 
   const [_, query] = location.hash.split("=");
   getMoviesBySearch(query);
-  infiniteScroll = () => {};
+  infiniteScroll = () => {
+    getMoviesBySearchPaginated(query);
+  };
 }
 
 function trendsPage() {

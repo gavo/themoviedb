@@ -83,6 +83,21 @@ async function getMoviesByCategory(id) {
     params: { with_genres: id },
   });
   createVideo(data.results, genericSection);
+  page = 1;
+  total_pages = data.total_pages;
+}
+
+async function getMoviesByCategoryPaginated(id) {
+  const scrollIsNotMax = page < total_pages;
+  if (scrollIsBottom() && scrollIsNotMax) {
+    page++;
+    const { data } = await api("discover/movie", {
+      params: { with_genres: id },
+      page,
+    });
+    createVideo(data.results, genericSection, { clean: false, lazyLoad: true });
+    total_pages = data.total_pages;
+  }
 }
 
 async function getMoviesBySearch(query) {
@@ -90,21 +105,39 @@ async function getMoviesBySearch(query) {
     params: { query },
   });
   createVideo(data.results, genericSection);
+  total_pages = data.total_pages;
+  page = 1;
+}
+
+async function getMoviesBySearchPaginated(query) {
+  const scrollIsNotMax = page < total_pages;
+  if (scrollIsBottom() && scrollIsNotMax) {
+    page++;
+    const { data } = await api("search/movie", {
+      params: { query, page, include_adult: false },
+    });
+    total_pages = data.total_pages;
+    createVideo(data.results, genericSection, { clean: false, lazyLoad: true });
+  }
 }
 
 async function getTrendingMovies() {
   const { data } = await api("trending/movie/week");
   createVideo(data.results, genericSection);
+  total_pages = data.total_pages;
+  page = 1;
 }
 
 async function getPaginatedTrendingMovies() {
-  if (scrollIsBottom()) {
+  const scrollIsNotMax = page < total_pages;
+  if (scrollIsBottom() && scrollIsNotMax) {
     page++;
     const { data } = await api("trending/movie/week", {
       params: {
         page,
       },
     });
+    total_pages = data.total_pages;
     createVideo(data.results, genericSection, { clean: false, lazyLoad: true });
   }
 }
