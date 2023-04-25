@@ -78,22 +78,28 @@ button {
   font-size: 14px;
   cursor: pointer;
 }
+
+/* Shared */
 .header-container,
 .trendingPreview-header,
-.categoriesPreview-container {
+.categoriesPreview-container,
+.liked-header {
   padding: 0 24px;
 }
 .trendingPreview-container,
 .categoriesPreview-container,
+.liked-container,
 footer {
   margin-top: 48px;
 }
 .trendingPreview-header,
-.categoriesPreview-title {
+.categoriesPreview-title,
+.liked-header {
   margin-bottom: 24px;
 }
 .movie-container {
   cursor: pointer;
+  position: relative;
 }
 .movie-container--loading {
   background: var(--purple-light-2);
@@ -121,6 +127,33 @@ footer {
   border-radius: 8px;
   min-height: 300px;
 }
+
+.movie-btn {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  height: 30px;
+  width: 30px;
+  border-radius: 30px;
+  padding: 0;
+  margin: 0;
+  z-index: 10;
+}
+
+.movie-btn::before {
+  content: "🤍";
+  font-size: 18px;
+}
+
+.movie-btn--liked {
+  background-color: var(--purple-light-2);
+  box-shadow: 0px 0px 10px 2px var(--purple-dark-1);
+}
+
+.movie-btn--liked::before {
+  content: "💜";
+}
+
 .categoriesPreview-list,
 .categories-list {
   display: flex;
@@ -198,17 +231,20 @@ footer {
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
 }
-.trendingPreview-header {
+.trendingPreview-header,
+.liked-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-direction: column;
 }
 .trendingPreview-btn {
   border-radius: 8px;
   height: 32px;
   width: 72px;
 }
-.trendingPreview-movieList {
+.trendingPreview-movieList,
+.liked-movieList {
   overflow-x: scroll;
   overflow-y: hidden;
   white-space: nowrap;
@@ -216,11 +252,13 @@ footer {
   padding-left: 24px;
   padding-bottom: 16px;
 }
-.trendingPreview-movieList .movie-container {
+.trendingPreview-movieList .movie-container,
+.liked-movieList .movie-container {
   display: inline-block;
   margin-right: 8px;
 }
-.trendingPreview-movieList .movie-container .movie-img {
+.trendingPreview-movieList .movie-container .movie-img,
+.liked-movieList .movie-container .movie-img {
   height: 225px;
   min-height: 225px;
   max-height: 225px;
